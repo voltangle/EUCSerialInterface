@@ -1,14 +1,10 @@
-# Electric Unicycle Interface Library
+# Electric Unicycle Serial Interface Library: Arduino library to interface electric unicycles
 
-Arduino library to interface electric unicycles.  
-
-## Intro
-
-This library allows you to receive and automatically decode the data that EUCs (=Electric Unicycles) send via their Bluetooth interface.  
-It has been tested on several older GotWay EUCs.  
+This library allows you to receive and automatically decode the data that EUCs (Electric Unicycles) send via their Bluetooth interface.  
+It has been tested on several older GotWay EUCs, but is now getting rewritten to support differrent models, and more.
 This library can be used with serial Bluetooth modules that can act in master mode, like the HC-05.  
 It can also be used to comminicate with the EUCs internal serial interface directly.
-(The internal serial interface I'm talking about are the tx/rx pins that go from the motherboard of your Unicycle to it's Bluetooth module.)  
+(The internal serial interface I'm talking about are the RX/TX pins that go from the motherboard of your Unicycle to it's Bluetooth module.)  
 
 ## Features
 
@@ -21,7 +17,7 @@ It can also be used to comminicate with the EUCs internal serial interface direc
 - Read Milage since last startup
 - Read Temperature
 
-#### Using these values you can calculate
+Using these values you can calculate
 
 - Battery status
 - Acceleration
