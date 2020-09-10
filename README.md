@@ -7,48 +7,49 @@ Arduino library to interface electric unicycles.
 This library allows you to receive and automatically decode the data that EUCs (=Electric Unicycles) send via their Bluetooth interface.  
 It has been tested on several older GotWay EUCs.  
 This library can be used with serial Bluetooth modules that can act in master mode, like the HC-05.  
-It can also be used to comminicate with the EUCs internal serial interface directly.   
+It can also be used to comminicate with the EUCs internal serial interface directly.
 (The internal serial interface I'm talking about are the tx/rx pins that go from the motherboard of your Unicycle to it's Bluetooth module.)  
 
 ## Features
 
 ### Receiving / calculating data
 
- - Read Voltage
- - Read Current
- - Read Speed
- - Read Total Mileage
- - Read Milage since last startup
- - Read Temperature
+- Read Voltage
+- Read Current
+- Read Speed
+- Read Total Mileage
+- Read Milage since last startup
+- Read Temperature
 
-#### Using these values you can calculate: 
+#### Using these values you can calculate
 
- - Battery status
- - Acceleration
- - If the unicycle is breaking
- - How much power (Watt) it is currently using
- - and much more...
- 
+- Battery status
+- Acceleration
+- If the unicycle is breaking
+- How much power (Watt) it is currently using
+- and much more...
+
 ### Sending commands
 
- - Make the unicylce beep
- - Set the unicycle to madden mode
- - Set the unicycle to comfort mode
- - Set the unicycle to soft mode
- - Set horizontal alignment
- - Turn off level 1 alarm
- - Turn off level 2 alarm
- - Turn on speed alarms
- - Enable tilt-back at 6km/h
- - Disable tilt-back at 6km/h
- 
+- Make the unicylce beep
+- Set the unicycle to madden mode
+- Set the unicycle to comfort mode
+- Set the unicycle to soft mode
+- Set horizontal alignment
+- Turn off level 1 alarm
+- Turn off level 2 alarm
+- Turn on speed alarms
+- Enable tilt-back at 6km/h
+- Disable tilt-back at 6km/h
+
 ### Video: Electric Unicycle Interface Example: Led Rainbow and Breaklight
+
 [![Video](https://img.youtube.com/vi/9l_gGwaTyRE/0.jpg)](https://www.youtube.com/watch?v=9l_gGwaTyRE)  
 Code used: [examples/DirectLedWheel/DirectLedWheel.ino](examples/DirectLedWheel/DirectLedWheel.ino)
 
-### Usage 
+### Usage
 
-#### via Bluetooth
+#### Via Bluetooth
 
 ``` C++
 #include <SoftwareSerial.h>
@@ -85,9 +86,10 @@ void eucLoop(float voltage, float speed, float tempMileage, float current, float
 ```
 
 #### directly wired to the electric unicycle
+
 Note: SoftwareSerial only works properly with a baud of up to 9600.
-If you're wired to the serial interface of the unicycle directly, you'll have to operate at a baud of 115200. 
-Meaning you'll have to use your Arduino's hardware serial. 
+If you're wired to the serial interface of the unicycle directly, you'll have to operate at a baud of 115200.
+Meaning you'll have to use your Arduino's hardware serial.
 
 ``` C++
 #include <EucInterface.h>
@@ -111,7 +113,8 @@ void eucLoop(float voltage, float speed, float tempMileage, float current, float
 ```
 
 ### API docs
-``` c++
+
+``` C++
 Euc(ReceiverSerial, TransmitterSerial); //create new instance of this class
 
 Euc.tick(); // simply has to be called regularly
