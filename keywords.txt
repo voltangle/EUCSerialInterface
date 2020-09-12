@@ -10,7 +10,7 @@ EUC	KEYWORD1
 # Methods and Functions 
 #######################################	
 
-checkData	KEYWORD2
+tick	KEYWORD2
 setCallback	KEYWORD2
 beep	KEYWORD2
 setRideMode	KEYWORD2
