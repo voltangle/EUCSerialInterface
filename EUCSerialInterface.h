@@ -36,7 +36,10 @@ class EUC {
             float mileage;
             bool dataIsNew = false;
         };
-        
+
+        Stream &ReceiverSerial;
+        Stream &TransmitterSerial;
+        void (*eucLoop)(float,float,float,float,float,float,bool);
     
         Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
         void checkData();
