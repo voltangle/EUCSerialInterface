@@ -10,7 +10,8 @@ void EUC::setCallback(void (*eucLoopCallback)(float,float,float,float,float,floa
 }
 
 void EUC::tick() {
-  Euc::RawData rawData = this->receiveRawData();
-  Euc::UsableData data = this->makeRawDataUsable(rawData);
+  EUC::RawData rawData = this->receiveRawData();
+  EUC::UsableData data = this->makeRawDataUsable(rawData);
   this->eucLoop(data.voltage,data.speed,data.tempMileage,data.current,data.temperature,data.mileage,data.dataIsNew);
 }
+
