@@ -41,8 +41,9 @@ class EUC {
         Stream &TransmitterSerial;
         void (*eucLoop)(float,float,float,float,float,float,bool);
     
-        Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
-        void checkData();
+        EUC(Stream &ReceiverSerial, Stream &TransmitterSerial);
+
+        void tick();
         void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
 
         void beep();
@@ -51,7 +52,8 @@ class EUC {
         void calibrateAlignment();
         void set6kmhTiltback(bool state);
     private:
-
+        Euc::RawData receiveRawData();
+        EUC::UsableData makeRawDataUsable(EUC::RawData eucRawData);
 }
 
 #endif // EUC_SERIAL_INTERFACE_H
