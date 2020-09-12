@@ -48,8 +48,8 @@ public:
   Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
   
   void tick();
-  void setCallback(void (*eucLoopCallback)(float,float,float,float,float,float,bool));
-  
+  void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
+
   void beep();
   void maddenMode();
   void comfortMode();
