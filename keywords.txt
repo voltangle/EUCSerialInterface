@@ -1,0 +1,26 @@
+#######################################
+# Syntax Coloring Map For EUCSerialInterface
+####################################### 
+# Class
+#######################################
+
+EUC	KEYWORD1
+
+#######################################
+# Methods and Functions 
+#######################################	
+
+checkData	KEYWORD2
+setCallback	KEYWORD2
+beep	KEYWORD2
+setRideMode	KEYWORD2
+calibrateAlignment	KEYWORD2
+setAlarms	KEYWORD2
+enableAlarms	KEYWORD2
+set6kmhTiltback	KEYWORD2
+
+
+#######################################
+# Constants
+#######################################
+ 
