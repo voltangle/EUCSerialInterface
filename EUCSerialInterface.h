@@ -5,15 +5,6 @@
 
 class EUC {
     public:
-        Stream &ReceiverSerial;
-        Stream &TransmitterSerial;
-        void (*eucLoop)(float,float,float,float,float,float,bool);
-    
-        EUC(Stream &ReceiverSerial, Stream &TransmitterSerial);
-};
-
-class GWMSX: public EUC {
-    public:
         void tick();
         void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
 
@@ -23,6 +14,29 @@ class GWMSX: public EUC {
         void calibrateAlignment();
         void set6kmhTiltback(bool state);
 
+        Stream &ReceiverSerial;
+        Stream &TransmitterSerial;
+        void (*eucLoop)(float,float,float,float,float,float,bool);
+    
+        EUC(Stream &ReceiverSerial, Stream &TransmitterSerial);
+
+        int getRideState();
+    protected:
+        // Main data
+        float _voltage;
+        float _speed;
+        float _tempMileage;
+        float _current;
+        float _temperature;
+        //unsigned char unknownData[4];
+        float -mileage;
+
+        int _rideState;
+        bool _dataIsNew = false;
+};
+
+class GWMSX: public EUC {
+    public:
         struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
             unsigned char voltage[2] = {0x00, 0x00};
@@ -36,16 +50,6 @@ class GWMSX: public EUC {
             unsigned char mileage[4] = {0x00, 0x00, 0x00, 0x00};
             unsigned char end[12] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
             
-            bool dataIsNew = false;
-        };
-        struct UsableData {
-            float voltage;
-            float speed;
-            float tempMileage;
-            float current;
-            float temperature;
-            //unsigned char unknownData[4];
-            float mileage;
             bool dataIsNew = false;
         };
         Euc::RawData receiveRawData();
