@@ -3,10 +3,12 @@
 
 #include <Arduino.h>
 
-class EUC {
+class Euc {
     public:
+        Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
+
         void tick();
-        void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
+        void setCallback(void (*eucLoopCallback)(GotwayMsxData));
 
         void beep();
         void setRideMode(int mode);
@@ -18,24 +20,26 @@ class EUC {
         Stream &TransmitterSerial;
         void (*eucLoop)(float,float,float,float,float,float,bool);
     
-        EUC(Stream &ReceiverSerial, Stream &TransmitterSerial);
-
         int getRideState();
-    protected:
-        // Main data
-        float _voltage;
-        float _speed;
-        float _tempMileage;
-        float _current;
-        float _temperature;
-        //unsigned char unknownData[4];
-        float -mileage;
-
-        int _rideState;
-        bool _dataIsNew = false;
 };
+/*
+ * Class for usable data from unicycle
+ */
+class EucData {
+    public:
+        // Main data
+        float voltage;
+        float speed;
+        float tempMileage;
+        float current;
+        float temperature;
+        //unsigned char unknownData[4];
+        float mileage;
 
-class GWMSX: public EUC {
+        int rideState;
+        bool dataIsNew = false;
+}
+class GotwayMsX: public Euc {
     public:
         struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
@@ -52,8 +56,8 @@ class GWMSX: public EUC {
             
             bool dataIsNew = false;
         };
-        Euc::RawData receiveRawData();
-        EUC::UsableData makeRawDataUsable(EUC::RawData eucRawData);
+        GotwayMsX::RawData receiveRawData();
+        GotwayMsX::UsableData makeRawDataUsable(Euc::RawData eucRawData);
 };
 
 #endif // EUC_SERIAL_INTERFACE_H
