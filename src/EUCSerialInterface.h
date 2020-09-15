@@ -11,7 +11,6 @@ class Euc {
 
         Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
 
-        void tick();
         void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
 
         void beep();
@@ -25,12 +24,6 @@ class Euc {
         void (*eucLoop)(float,float,float,float,float,float,bool);
     
         int getRideState();
-
-        float getVoltage() {return _voltage;}
-        float getSpeed() {return _speed;}
-        float getTempMileage() {return _tempMileage;}
-        float getTemperature() {return _temperature;}
-        float getMileage() {return _mileage;}
     protected:
         // Main data
         float _voltage;
@@ -72,6 +65,9 @@ class GotwayMcm2: public Euc {
             float mileage;
             bool dataIsNew = false;
         };
+        
+        void tick();
+
         GotwayMcm2::RawData receiveRawData();
         GotwayMcm2::UsableData makeRawDataUsable(GotwayMcm2::RawData eucRawData);
 };
@@ -90,11 +86,12 @@ class GotwayMcm4: public Euc {
             
             float calculateAcceleration();
             float calculatePower();
-            bool isNew();
+            bool dataIsNew();
         };
         float calculateAcceleration();
         float calculatePower();
 }
 
 class GotwayM0;
+
 #endif // EUC_SERIAL_INTERFACE_H
