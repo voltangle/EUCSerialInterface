@@ -3,15 +3,10 @@
 
 #include <Arduino.h>
 
+typedef GotwayMcm2 GotwayM0;
+
 class Euc {
     public:
-        // Main data
-        float voltage;
-        float speed;
-        float tempMileage;
-        float temperature;
-        float mileage;
-        
         bool isNew();
 
         Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
@@ -30,15 +25,27 @@ class Euc {
         void (*eucLoop)(float,float,float,float,float,float,bool);
     
         int getRideState();
-    protected:
 
+        float getVoltage() {return _voltage;}
+        float getSpeed() {return _speed;}
+        float getTempMileage() {return _tempMileage;}
+        float getTemperature() {return _temperature;}
+        float getMileage() {return _mileage;}
+    protected:
+        // Main data
+        float _voltage;
+        float _speed;
+        float _tempMileage;
+        float _temperature;
+        float _mileage;
+        
 };
 
 /*
  * Class for usable data from unicycle
  */
 
-class GotwayMCM2: public Euc {
+class GotwayMcm2: public Euc {
     public:
         struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
@@ -65,11 +72,11 @@ class GotwayMCM2: public Euc {
             float mileage;
             bool dataIsNew = false;
         };
-        GotwayMCM2::RawData receiveRawData();
-        GotwayMCM2::UsableData makeRawDataUsable(GotwayMCM2::RawData eucRawData);
+        GotwayMcm2::RawData receiveRawData();
+        GotwayMcm2::UsableData makeRawDataUsable(GotwayMcm2::RawData eucRawData);
 };
 
-class GotwayMCM4: public Euc {
+class GotwayMcm4: public Euc {
     public:
         struct RawData {
 
@@ -89,4 +96,5 @@ class GotwayMCM4: public Euc {
         float calculatePower();
 }
 
+class GotwayM0;
 #endif // EUC_SERIAL_INTERFACE_H
