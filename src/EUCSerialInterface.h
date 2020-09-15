@@ -5,10 +5,19 @@
 
 class Euc {
     public:
+        // Main data
+        float voltage;
+        float speed;
+        float tempMileage;
+        float temperature;
+        float mileage;
+        
+        bool isNew();
+
         Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
 
         void tick();
-        void setCallback(void (*eucLoopCallback)(GotwayMsxData));
+        void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
 
         void beep();
         void setRideMode(int mode);
@@ -21,25 +30,15 @@ class Euc {
         void (*eucLoop)(float,float,float,float,float,float,bool);
     
         int getRideState();
+    protected:
+
 };
+
 /*
  * Class for usable data from unicycle
  */
-class EucData {
-    public:
-        // Main data
-        float voltage;
-        float speed;
-        float tempMileage;
-        float current;
-        float temperature;
-        //unsigned char unknownData[4];
-        float mileage;
 
-        int rideState;
-        bool dataIsNew = false;
-}
-class GotwayMsX: public Euc {
+class GotwayMCM2: public Euc {
     public:
         struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
@@ -56,8 +55,38 @@ class GotwayMsX: public Euc {
             
             bool dataIsNew = false;
         };
-        GotwayMsX::RawData receiveRawData();
-        GotwayMsX::UsableData makeRawDataUsable(Euc::RawData eucRawData);
+        struct UsableData {
+            float voltage;
+            float speed;
+            float tempMileage;
+            float current;
+            float temperature;
+            //unsigned char unknownData[4];
+            float mileage;
+            bool dataIsNew = false;
+        };
+        GotwayMCM2::RawData receiveRawData();
+        GotwayMCM2::UsableData makeRawDataUsable(GotwayMCM2::RawData eucRawData);
 };
+
+class GotwayMCM4: public Euc {
+    public:
+        struct RawData {
+
+        };
+        struct UsableData {
+            float voltage;
+            float speed;
+            float tempMileage;
+            float temperature;
+            float mileage;
+            
+            float calculateAcceleration();
+            float calculatePower();
+            bool isNew();
+        };
+        float calculateAcceleration();
+        float calculatePower();
+}
 
 #endif // EUC_SERIAL_INTERFACE_H
