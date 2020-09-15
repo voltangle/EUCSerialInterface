@@ -1,4 +1,10 @@
-#include "EUCSerialInterface.h"
+/*
+ * This is a source file of GotWay MCM2 decoder and
+ * controller. Also used by GotWay M0 electric
+ * unicycle.
+ */
+
+#include "EUCSerialInterface.h" // Include main header file
 
 void GotwayMcm2::tick() {
   GotwayMcm2::RawData rawData = this->receiveRawData();
@@ -6,8 +12,8 @@ void GotwayMcm2::tick() {
   this->eucLoop(data.voltage,data.speed,data.tempMileage,data.current,data.temperature,data.mileage,data.dataIsNew);
 }
 
-Euc::UsableData Euc::makeRawDataUsable(Euc::RawData eucRawData) {
-  Euc::UsableData eucUsableData;
+GotwayMcm2::UsableData GotwayMcm2::makeRawDataUsable(GotwayMcm2::RawData eucRawData) {
+  GotwayMcm2::UsableData eucUsableData;
   
   eucUsableData.voltage = (float)((eucRawData.voltage[0] << 8) | eucRawData.voltage[1])/100; // volts
   eucUsableData.speed = (float)((eucRawData.speed[0] << 8) | eucRawData.speed[1])/100*3.6; // kilometers per hour
@@ -19,31 +25,31 @@ Euc::UsableData Euc::makeRawDataUsable(Euc::RawData eucRawData) {
   
   return eucUsableData;
 }
-Euc::RawData Euc::receiveRawData() {
+GotwayMcm2::RawData GotwayMcm2::receiveRawData() {
   static unsigned int curPos = 0; // stores the current position the packet parser
-  static Euc::RawData eucRawDataReceived;
-  static Euc::RawData eucRawDataReceivedValid;
+  static GotwayMcm2::RawData eucRawDataReceived;
+  static GotwayMcm2::RawData eucRawDataReceivedValid;
   // TODO: there has to be a better way than this
-  static unsigned int hppEnd = sizeof Euc::RawData().headerPrimaryPacket;
-  static unsigned int hppSize = sizeof Euc::RawData().headerPrimaryPacket;
-  static unsigned int voltageEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage;
-  static unsigned int voltageSize = sizeof Euc::RawData().voltage;
-  static unsigned int speedEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed;
-  static unsigned int speedSize = sizeof Euc::RawData().speed;
-  static unsigned int tempMileageEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage;
-  static unsigned int tempMileageSize = sizeof Euc::RawData().tempMileage;
-  static unsigned int currentEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current;
-  static unsigned int currentSize = sizeof Euc::RawData().current;
-  static unsigned int temperatureEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current+sizeof Euc::RawData().temperature;
-  static unsigned int temperatureSize = sizeof Euc::RawData().temperature;
-  static unsigned int unknownDataEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current+sizeof Euc::RawData().temperature+sizeof Euc::RawData().unknownData;
-  static unsigned int unknownDataSize = sizeof Euc::RawData().unknownData;
-  static unsigned int hspEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current+sizeof Euc::RawData().temperature+sizeof Euc::RawData().unknownData+sizeof Euc::RawData().headerSecondaryPacket;
-  static unsigned int hspSize = sizeof Euc::RawData().headerSecondaryPacket;
-  static unsigned int mileageEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current+sizeof Euc::RawData().temperature+sizeof Euc::RawData().unknownData+sizeof Euc::RawData().headerSecondaryPacket+sizeof Euc::RawData().mileage;
-  static unsigned int mileageSize = sizeof Euc::RawData().mileage;
-  static unsigned int endEnd = sizeof Euc::RawData().headerPrimaryPacket+sizeof Euc::RawData().voltage+sizeof Euc::RawData().speed+sizeof Euc::RawData().tempMileage+sizeof Euc::RawData().current+sizeof Euc::RawData().temperature+sizeof Euc::RawData().unknownData+sizeof Euc::RawData().headerSecondaryPacket+sizeof Euc::RawData().mileage+sizeof Euc::RawData().end-1;
-  static unsigned int endSize = sizeof Euc::RawData().end;
+  static unsigned int hppEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket;
+  static unsigned int hppSize = sizeof GotwayMcm2::RawData().headerPrimaryPacket;
+  static unsigned int voltageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage;
+  static unsigned int voltageSize = sizeof GotwayMcm2::RawData().voltage;
+  static unsigned int speedEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed;
+  static unsigned int speedSize = sizeof GotwayMcm2::RawData().speed;
+  static unsigned int tempMileageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage;
+  static unsigned int tempMileageSize = sizeof GotwayMcm2::RawData().tempMileage;
+  static unsigned int currentEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current;
+  static unsigned int currentSize = sizeof GotwayMcm2::RawData().current;
+  static unsigned int temperatureEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current+sizeof GotwayMcm2::RawData().temperature;
+  static unsigned int temperatureSize = sizeof GotwayMcm2::RawData().temperature;
+  static unsigned int unknownDataEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current+sizeof GotwayMcm2::RawData().temperature+sizeof GotwayMcm2::RawData().unknownData;
+  static unsigned int unknownDataSize = sizeof GotwayMcm2::RawData().unknownData;
+  static unsigned int hspEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current+sizeof GotwayMcm2::RawData().temperature+sizeof GotwayMcm2::RawData().unknownData+sizeof GotwayMcm2::RawData().headerSecondaryPacket;
+  static unsigned int hspSize = sizeof GotwayMcm2::RawData().headerSecondaryPacket;
+  static unsigned int mileageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current+sizeof GotwayMcm2::RawData().temperature+sizeof GotwayMcm2::RawData().unknownData+sizeof GotwayMcm2::RawData().headerSecondaryPacket+sizeof GotwayMcm2::RawData().mileage;
+  static unsigned int mileageSize = sizeof GotwayMcm2::RawData().mileage;
+  static unsigned int endEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket+sizeof GotwayMcm2::RawData().voltage+sizeof GotwayMcm2::RawData().speed+sizeof GotwayMcm2::RawData().tempMileage+sizeof GotwayMcm2::RawData().current+sizeof GotwayMcm2::RawData().temperature+sizeof GotwayMcm2::RawData().unknownData+sizeof GotwayMcm2::RawData().headerSecondaryPacket+sizeof GotwayMcm2::RawData().mileage+sizeof GotwayMcm2::RawData().end-1;
+  static unsigned int endSize = sizeof GotwayMcm2::RawData().end;
 
   eucRawDataReceivedValid.dataIsNew = false;
   if (ReceiverSerial.available() > 0) { // if a new byte has been received
@@ -99,19 +105,26 @@ Euc::RawData Euc::receiveRawData() {
   return eucRawDataReceivedValid;
 }
 
-void Euc::beep() {
+void GotwayMcm2::beep() {
   this->TransmitterSerial.println("b");
 }
-void Euc::maddenMode() {
-  this->TransmitterSerial.println("h");
+
+void GotwayMcm2::setRideRigidity(int mode) {
+    switch (mode) {
+        case 1:
+            this->TransmitterSerial.println("s");
+            break;
+        case 2:
+            this->TransmitterSerial.println("f");
+            break;
+        case 3:
+            this->TransmitterSerial.println("h");
+        default:
+            break;
+    }
 }
-void Euc::comfortMode() {
-  this->TransmitterSerial.println("f");
-}
-void Euc::softMode() {
-  this->TransmitterSerial.println("s");
-}
-void Euc::calibrateAlignment() {
+
+void GotwayMcm2::calibrateAlignment() {
   // TODO: check if delays are necessary
   this->TransmitterSerial.println(",");
   this->TransmitterSerial.println("c");
@@ -121,18 +134,36 @@ void Euc::calibrateAlignment() {
   this->TransmitterSerial.println("cy");
   this->TransmitterSerial.println("y");
 }
-void Euc::disableLevel1Alarm() {
-  this->TransmitterSerial.println("u");
+
+void GotwayMcm2::setAlarms(int level, bool state) {
+    switch (level) {
+        case 1:
+            if (state == false) {
+                this->TransmitterSerial.println("u");   // Disable level 1 alarm
+            } else if (state == true) {
+                this->TransmitterSerial.println("o");   // Enable all alarms
+                this->TransmitterSerial.println("i");   // Disable level 2 alarms
+            }
+            break;
+        case 2:
+            if (state == false) {
+                this->TransmitterSerial.println("i");   // Disable level 2 alarm
+            } else if (state == true) {
+                this->TransmitterSerial.println("o");   // Enable all alarms
+                this->TransmitterSerial.println("u");   // Disable level 1 alarm
+            }
+            break;
+        case 0:
+            this->TransmitterSerial.println("o");
+
+        default:
+            break;
+    }
 }
-void Euc::disableLevel2Alarm() {
-  this->TransmitterSerial.println("i");
-}
-void Euc::enableAlarms() {
-  this->TransmitterSerial.println("o");
-}
-void Euc::enable6kmhTiltback() {
-  this->TransmitterSerial.println("O");
-}
-void Euc::disable6kmhTiltback() {
-  this->TransmitterSerial.println("I");
+void GotwayMcm2::set6kmhTiltback(bool state) {
+    if (state == true) {
+        this->TransmitterSerial.println("O");
+    } else {
+        this->TransmitterSerial.println("I");
+    }
 }
