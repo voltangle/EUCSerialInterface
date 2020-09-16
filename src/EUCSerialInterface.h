@@ -1,21 +1,24 @@
 #ifndef EUC_SERIAL_INTERFACE_H
 #define EUC_SERIAL_INTERFACE_H
 
-#include <Arduino.h>
+#if (ARDUINO >= 100)
+ #include <Arduino.h>
+#else
+ #include <WProgram.h>
+ #include <pins_arduino.h>
+#endif
 
 typedef GotwayMcm2 GotwayM0;
 
 class GotwayMcm2 {
     public:
-        struct RawData {
+        struct RawData {у
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
             unsigned char voltage[2] = {0x00, 0x00};
             unsigned char speed[2] = {0x00, 0x00};
             unsigned char tempMileage[4] = {0x00, 0x00, 0x00, 0x00};
             unsigned char current[2] = {0x00, 0x00};
             unsigned char temperature[2] = {0x00, 0x00};
-            //unsigned char unknownData[4]; // TODO: figure out what that is
-            //unsigned char headerSecondaryPacket[8] = {0x00, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
             unsigned char unknownData[4] = {0x00, 0x00, 0x00, 0x00}; // TODO: figure out what that is //NOTE: only first byte seems to change
             unsigned char headerSecondaryPacket[8] = {0x00, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
             unsigned char mileage[4] = {0x00, 0x00, 0x00, 0x00};
@@ -39,10 +42,10 @@ class GotwayMcm2 {
         Stream &TransmitterSerial;
         void (*eucLoop)(float,float,float,float,float,float,bool);
         
-        Euc::RawData receiveRawData();
-        Euc::UsableData makeRawDataUsable(Euc::RawData eucRawData);
+        GotwayMcm2::RawData receiveRawData();
+        GotwayMcm2::UsableData makeRawDataUsable(GotwayMcm2::RawData eucRawData);
         
-        Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
+        GotwayMcm2(Stream &ReceiverSerial, Stream &TransmitterSerial);
         
         void tick();
         void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
@@ -72,6 +75,44 @@ class GotwayMcm4 {
         };
         float calculateAcceleration();
         float calculatePower();
+}
+
+class VeteranSherman {
+    public:
+        struct RawData {
+            unsigned char headerPrimaryPacket[3] = {0xDC, 0x5A, 0x5C, 0x20};
+            unsigned char voltage[1] = {0x00, 0x00};
+            unsigned char speed[1] = {0x00, 0x00};
+            unsigned char tempMileage[3] = {0x00, 0x00, 0x00, 0x00};
+            unsigned char mileage[3] = {0x00, 0x00, 0x00, 0x00};
+            unsigned char current[1] = {0x00, 0x00};
+            unsigned char temperature[1] = {0x00, 0x00};
+        };
+        struct UsableData {
+            float voltage;
+            float speed;
+            float tempMileage;
+            float current;
+            float temperature;
+            float mileage;
+            bool dataIsNew = false;
+        };
+        
+        Stream &ReceiverSerial;
+        Stream &TransmitterSerial;
+        void (*eucLoop)(float,float,float,float,float,float,bool);
+        
+        VeteranSherman::RawData receiveRawData();
+        VeteranSherman::UsableData makeRawDataUsable(VeteranSherman::RawData eucRawData);
+        
+        Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
+        
+        void tick();
+        void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
+
+        void beep();
+        void setRideRigidity(int mode);
+        void calibrateAlignment();
 }
 
 class GotwayM0;
