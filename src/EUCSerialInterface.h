@@ -10,7 +10,7 @@
 
 class GotwayMcm2 {
     public:
-        struct RawData {}
+        struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
             unsigned char voltage[2] = {0x00, 0x00};
             unsigned char speed[2] = {0x00, 0x00};
@@ -73,18 +73,18 @@ class GotwayMcm4 {
         };
         float calculateAcceleration();
         float calculatePower();
-}
+};
 
 class VeteranSherman {
     public:
         struct RawData {
-            unsigned char headerPrimaryPacket[3] = {0xDC, 0x5A, 0x5C, 0x20};
-            unsigned char voltage[1] = {0x00, 0x00};
-            unsigned char speed[1] = {0x00, 0x00};
-            unsigned char tempMileage[3] = {0x00, 0x00, 0x00, 0x00};
-            unsigned char mileage[3] = {0x00, 0x00, 0x00, 0x00};
-            unsigned char current[1] = {0x00, 0x00};
-            unsigned char temperature[1] = {0x00, 0x00};
+            unsigned char headerPrimaryPacket[4] = {0xDC, 0x5A, 0x5C, 0x20};
+            unsigned char voltage[2] = {0x00, 0x00};
+            unsigned char speed[2] = {0x00, 0x00};
+            unsigned char tempMileage[4] = {0x00, 0x00, 0x00, 0x00};
+            unsigned char mileage[4] = {0x00, 0x00, 0x00, 0x00};
+            unsigned char current[2] = {0x00, 0x00};
+            unsigned char temperature[2] = {0x00, 0x00};
         };
         struct UsableData {
             float voltage;
@@ -103,7 +103,7 @@ class VeteranSherman {
         VeteranSherman::RawData receiveRawData();
         VeteranSherman::UsableData makeRawDataUsable(VeteranSherman::RawData eucRawData);
         
-        Euc(Stream &ReceiverSerial, Stream &TransmitterSerial);
+        VeteranSherman(Stream &ReceiverSerial, Stream &TransmitterSerial);
         
         void tick();
         void setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool));
@@ -111,9 +111,9 @@ class VeteranSherman {
         void beep();
         void setRideRigidity(int mode);
         void calibrateAlignment();
-}
+};
 
-class GotwayM0 {
+class GotwayM0 { // GotWay M0 class
     public:
         struct RawData {
             unsigned char headerPrimaryPacket[8] = {0x04, 0x18, 0x5A, 0x5A, 0x5A, 0x5A, 0x55, 0xAA};
