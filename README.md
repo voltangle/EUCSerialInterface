@@ -1,7 +1,11 @@
 # Electric Unicycle Serial Interface Library: Arduino library to interface electric unicycles
 
+## Disclaimer
+
+I will not be responsible or liable, directly or indirectly, in any way for any loss or damage of any kind incurred as a result of using this library or parts thereof.  
+
 This library allows you to receive and automatically decode the data that EUCs (Electric Unicycles) send via their Bluetooth interface.  
-It has been tested on several older GotWay EUCs, but is now getting rewritten to support differrent models, and more.
+It is now transitioning to new design that will allow it to support different manufacturers and models. For now tested only on GotWay MCM2 and M0.
 This library can be used with serial Bluetooth modules that can act in master mode, like the HC-05.  
 It can also be used to comminicate with the EUCs internal serial interface directly.
 (The internal serial interface I'm talking about are the RX/TX pins that go from the motherboard of your Unicycle to it's Bluetooth module.)  
@@ -54,7 +58,7 @@ Code used: [examples/DirectLedWheel/DirectLedWheel.ino](examples/DirectLedWheel/
 //Bluetooth serial with rx on pin 9 and tx on pin 10
 SoftwareSerial BluetoothSerial(9,10);
 
-Euc Euc(BluetoothSerial, BluetoothSerial); // Receive and transmit data via bluetooth
+GotwayMcm2 Euc(BluetoothSerial, BluetoothSerial); // Receive and transmit data via bluetooth to GotWay MCM2 EUC
 
 void setup() {
   Serial.begin(9600); // We'll use the normal hardware serial to print out all the received data
@@ -81,16 +85,16 @@ void eucLoop(float voltage, float speed, float tempMileage, float current, float
 }
 ```
 
-#### directly wired to the electric unicycle
+#### Directly wired to the electric unicycle
 
-Note: SoftwareSerial only works properly with a baud of up to 9600.
+Note: SoftwareSerial only works properly with a baud rate of up to 9600.
 If you're wired to the serial interface of the unicycle directly, you'll have to operate at a baud of 115200.
 Meaning you'll have to use your Arduino's hardware serial.
 
 ``` C++
 #include <EucInterface.h>
 
-Euc Euc(Serial, Serial); // Receive and transmit data via the Arduino's hardware serial
+GotwayMcm2 Euc(Serial, Serial); // Receive and transmit data via the Arduino's hardware serial
 
 void setup() {
   Serial.begin(115200);
@@ -111,30 +115,26 @@ void eucLoop(float voltage, float speed, float tempMileage, float current, float
 ### API docs
 
 ``` C++
-Euc(ReceiverSerial, TransmitterSerial); //create new instance of this class
+modelName(ReceiverSerial, TransmitterSerial); //create new instance of this class
 
-Euc.tick(); // simply has to be called regularly
-Euc.setCallback(callbackFunction); // you have to specify a callback function to which the class can send the data it receives from the unicycle
+.tick(); // simply has to be called regularly
+.setCallback(callbackFunction); // you have to specify a callback function to which the class can send the data it receives from the unicycle
 //Example callback function:
 void callbackFunction(float voltage, float speed, float tempMileage, float current, float temperature, float mileage, bool dataIsNew) {
   // Do something with the received data
 }
-Euc.beep(); // make the unicycle beep
-Euc.maddenMode(); // set madden mode
-Euc.comfortMode(); // set confort mode
-Euc.softMode(); // set soft mode
-Euc.calibrateAlignment(); // calibrate alignment
-Euc.disableLevel1Alarm(); // disable level 1 alarm
-Euc.disableLevel2Alarm(); // disable level 2 alarm
-Euc.enableAlarms(); // enable alarms
-Euc.enable6kmhTiltback(); // enable  6km/h tiltback
-Euc.disable6kmhTiltback(); // disable 6km/h tiltback
+.beep(); // make the unicycle beep
+.maddenMode(); // set madden mode
+.comfortMode(); // set confort mode
+.softMode(); // set soft mode
+.calibrateAlignment(); // calibrate alignment
+.disableLevel1Alarm(); // disable level 1 alarm
+.disableLevel2Alarm(); // disable level 2 alarm
+.enableAlarms(); // enable alarms
+.enable6kmhTiltback(); // enable  6km/h tiltback
+.disable6kmhTiltback(); // disable 6km/h tiltback
 ```
 
 ### More info
 
 The electric unicycles I tested send their data 5 times persecond with a consistent 200 millisecond delay between them.
-
-### Disclaimer
-
-I will not be responsible or liable, directly or indirectly, in any way for any loss or damage of any kind incurred as a result of using this library or parts thereof.  
