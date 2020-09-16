@@ -4,7 +4,10 @@
 # Class
 #######################################
 
-EUC	KEYWORD1
+VeteranSherman	KEYWORD1
+GotwayMcm2  KEYWORD1
+GotwayMcm4  KEYWORD1
+GotwayM0    KEYWORD1
 
 #######################################
 # Methods and Functions 
@@ -13,7 +16,7 @@ EUC	KEYWORD1
 tick	KEYWORD2
 setCallback	KEYWORD2
 beep	KEYWORD2
-setRideMode	KEYWORD2
+setRideRigidity	KEYWORD2
 calibrateAlignment	KEYWORD2
 setAlarms	KEYWORD2
 enableAlarms	KEYWORD2

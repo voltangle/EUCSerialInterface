@@ -1,14 +1,13 @@
 /*
- * This is a source file of GotWay MCM2 decoder and
+ * This is a source file of GotWay M0 decoder and
  * controller.
  */
 
 #include "EUCSerialInterface.h" // Include main header file
 
-void GotwayMcm2::tick()
-{
-    GotwayMcm2::RawData rawData = this->receiveRawData();
-    GotwayMcm2::UsableData data = this->makeRawDataUsable(rawData);
+void GotwayM0::tick()
+GotwayM00::RawData rawData = this->receiveRawData();
+    GotwayM0::UsableData data = this->makeRawDataUsable(rawData);
     this->eucLoop(
         data.voltage,
         data.speed,
@@ -19,9 +18,9 @@ void GotwayMcm2::tick()
         data.dataIsNew);
 }
 
-GotwayMcm2::UsableData GotwayMcm2::makeRawDataUsable(GotwayMcm2::RawData eucRawData)
+GotwayM0::UsableData GotwayM0::makeRawDataUsable(GotwayM0::RawData eucRawData)
 {
-    GotwayMcm2::UsableData eucUsableData;
+    GotwayM0::UsableData eucUsableData;
 
     eucUsableData.voltage = (float)((eucRawData.voltage[0] << 8) | eucRawData.voltage[1]) / 100;                                                                                                                           // volts
     eucUsableData.speed = (float)((eucRawData.speed[0] << 8) | eucRawData.speed[1]) / 100 * 3.6;                                                                                                                           // kilometers per hour
@@ -34,32 +33,32 @@ GotwayMcm2::UsableData GotwayMcm2::makeRawDataUsable(GotwayMcm2::RawData eucRawD
     return eucUsableData;
 }
 
-GotwayMcm2::RawData GotwayMcm2::receiveRawData()
+GotwayM0::RawData GotwayM0::receiveRawData()
 {
     static unsigned int curPos = 0; // stores the current position the packet parser
-    static GotwayMcm2::RawData eucRawDataReceived;
-    static GotwayMcm2::RawData eucRawDataReceivedValid;
+    static GotwayM0::RawData eucRawDataReceived;
+    static GotwayM0::RawData eucRawDataReceivedValid;
     // TODO: there has to be a better way than this
-    static unsigned int hppEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket;
-    static unsigned int hppSize = sizeof GotwayMcm2::RawData().headerPrimaryPacket;
-    static unsigned int voltageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage;
-    static unsigned int voltageSize = sizeof GotwayMcm2::RawData().voltage;
-    static unsigned int speedEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed;
-    static unsigned int speedSize = sizeof GotwayMcm2::RawData().speed;
-    static unsigned int tempMileageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage;
-    static unsigned int tempMileageSize = sizeof GotwayMcm2::RawData().tempMileage;
-    static unsigned int currentEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current;
-    static unsigned int currentSize = sizeof GotwayMcm2::RawData().current;
-    static unsigned int temperatureEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current + sizeof GotwayMcm2::RawData().temperature;
-    static unsigned int temperatureSize = sizeof GotwayMcm2::RawData().temperature;
-    static unsigned int unknownDataEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current + sizeof GotwayMcm2::RawData().temperature + sizeof GotwayMcm2::RawData().unknownData;
-    static unsigned int unknownDataSize = sizeof GotwayMcm2::RawData().unknownData;
-    static unsigned int hspEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current + sizeof GotwayMcm2::RawData().temperature + sizeof GotwayMcm2::RawData().unknownData + sizeof GotwayMcm2::RawData().headerSecondaryPacket;
-    static unsigned int hspSize = sizeof GotwayMcm2::RawData().headerSecondaryPacket;
-    static unsigned int mileageEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current + sizeof GotwayMcm2::RawData().temperature + sizeof GotwayMcm2::RawData().unknownData + sizeof GotwayMcm2::RawData().headerSecondaryPacket + sizeof GotwayMcm2::RawData().mileage;
-    static unsigned int mileageSize = sizeof GotwayMcm2::RawData().mileage;
-    static unsigned int endEnd = sizeof GotwayMcm2::RawData().headerPrimaryPacket + sizeof GotwayMcm2::RawData().voltage + sizeof GotwayMcm2::RawData().speed + sizeof GotwayMcm2::RawData().tempMileage + sizeof GotwayMcm2::RawData().current + sizeof GotwayMcm2::RawData().temperature + sizeof GotwayMcm2::RawData().unknownData + sizeof GotwayMcm2::RawData().headerSecondaryPacket + sizeof GotwayMcm2::RawData().mileage + sizeof GotwayMcm2::RawData().end - 1;
-    static unsigned int endSize = sizeof GotwayMcm2::RawData().end;
+    static unsigned int hppEnd = sizeof GotwayM0::RawData().headerPrimaryPacket;
+    static unsigned int hppSize = sizeof GotwayM0::RawData().headerPrimaryPacket;
+    static unsigned int voltageEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage;
+    static unsigned int voltageSize = sizeof GotwayM0::RawData().voltage;
+    static unsigned int speedEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed;
+    static unsigned int speedSize = sizeof GotwayM0::RawData().speed;
+    static unsigned int tempMileageEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage;
+    static unsigned int tempMileageSize = sizeof GotwayM0::RawData().tempMileage;
+    static unsigned int currentEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current;
+    static unsigned int currentSize = sizeof GotwayM0::RawData().current;
+    static unsigned int temperatureEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current + sizeof GotwayM0::RawData().temperature;
+    static unsigned int temperatureSize = sizeof GotwayM0::RawData().temperature;
+    static unsigned int unknownDataEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current + sizeof GotwayM0::RawData().temperature + sizeof GotwayM0::RawData().unknownData;
+    static unsigned int unknownDataSize = sizeof GotwayM0::RawData().unknownData;
+    static unsigned int hspEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current + sizeof GotwayM0::RawData().temperature + sizeof GotwayM0::RawData().unknownData + sizeof GotwayM0::RawData().headerSecondaryPacket;
+    static unsigned int hspSize = sizeof GotwayM0::RawData().headerSecondaryPacket;
+    static unsigned int mileageEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current + sizeof GotwayM0::RawData().temperature + sizeof GotwayM0::RawData().unknownData + sizeof GotwayM0::RawData().headerSecondaryPacket + sizeof GotwayM0::RawData().mileage;
+    static unsigned int mileageSize = sizeof GotwayM0::RawData().mileage;
+    static unsigned int endEnd = sizeof GotwayM0::RawData().headerPrimaryPacket + sizeof GotwayM0::RawData().voltage + sizeof GotwayM0::RawData().speed + sizeof GotwayM0::RawData().tempMileage + sizeof GotwayM0::RawData().current + sizeof GotwayM0::RawData().temperature + sizeof GotwayM0::RawData().unknownData + sizeof GotwayM0::RawData().headerSecondaryPacket + sizeof GotwayM0::RawData().mileage + sizeof GotwayM0::RawData().end - 1;
+    static unsigned int endSize = sizeof GotwayM0::RawData().end;
 
     eucRawDataReceivedValid.dataIsNew = false;
     if (ReceiverSerial.available() > 0)
@@ -144,12 +143,12 @@ GotwayMcm2::RawData GotwayMcm2::receiveRawData()
     }
 }
 
-void GotwayMcm2::beep()
+void GotwayM0::beep()
 {
     this->TransmitterSerial.println("b");
 }
 
-void GotwayMcm2::setRideRigidity(int mode)
+void GotwayM0::setRideRigidity(int mode)
 {
     switch (mode)
     {
@@ -166,7 +165,7 @@ void GotwayMcm2::setRideRigidity(int mode)
     }
 }
 
-void GotwayMcm2::calibrateAlignment()
+void GotwayM0::calibrateAlignment()
 {
     // TODO: check if delays are necessary
     this->TransmitterSerial.println(",");
@@ -178,7 +177,7 @@ void GotwayMcm2::calibrateAlignment()
     this->TransmitterSerial.println("y");
 }
 
-void GotwayMcm2::setAlarms(int level, bool state)
+void GotwayM0::setAlarms(int level, bool state)
 {
     switch (level)
     {
@@ -212,7 +211,7 @@ void GotwayMcm2::setAlarms(int level, bool state)
     }
 }
 
-void GotwayMcm2::set6kmhTiltback(bool state)
+void GotwayM0::set6kmhTiltback(bool state)
 {
     if (state == true)
     {
