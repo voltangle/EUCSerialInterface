@@ -5,6 +5,11 @@
 
 #include "EUCSerialInterface.h" // Include main header file
 
+
+GotwayMcm2::GotwayMcm2(Stream &ReceiverSerial, Stream &TransmitterSerial):
+ReceiverSerial(ReceiverSerial), TransmitterSerial(TransmitterSerial) {
+}
+
 void GotwayMcm2::tick()
 {
     GotwayMcm2::RawData rawData = this->receiveRawData();
@@ -76,7 +81,7 @@ GotwayMcm2::RawData GotwayMcm2::receiveRawData()
             {
                 curPos = 0;
             }
-            else if (curPos < voltageEnd)
+            if (curPos < voltageEnd)
             {
                 eucRawDataReceived.voltage[curPos - (voltageEnd - voltageSize)] = currentByte;
                 curPos++;
@@ -116,7 +121,7 @@ GotwayMcm2::RawData GotwayMcm2::receiveRawData()
                 {
                     curPos = 0;
                 }
-                else if (curPos < mileageEnd)
+                if (curPos < mileageEnd)
                 {
                     eucRawDataReceived.mileage[curPos - (mileageEnd - mileageSize)] = currentByte;
                     curPos++;

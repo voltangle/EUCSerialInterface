@@ -1,7 +1,7 @@
 /*
  * This is a source file of Veteran Sherman decoder and
  * controller.
- */
+ *
 
 #include "EUCSerialInterface.h" // Include main header file
 
@@ -38,3 +38,4 @@ VeteranSherman::UsableData VeteranSherman::makeRawDataUsable(VeteranSherman::Raw
 
 	return eucUsableData;
 }
+*/
