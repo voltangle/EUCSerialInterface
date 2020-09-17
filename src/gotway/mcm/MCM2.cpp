@@ -10,6 +10,10 @@ GotwayMcm2::GotwayMcm2(Stream &ReceiverSerial, Stream &TransmitterSerial):
 ReceiverSerial(ReceiverSerial), TransmitterSerial(TransmitterSerial) {
 }
 
+void GotwayMcm2::setCallback(void (*eucLoopCallback)(float,float,float,float,float,float,bool)) {
+  eucLoop = eucLoopCallback;
+}
+
 void GotwayMcm2::tick()
 {
     GotwayMcm2::RawData rawData = this->receiveRawData();
