@@ -5,13 +5,13 @@
 
 #include "EUCSerialInterface.h" // Include main header file
 
-
-GotwayM0::GotwayM0(Stream &ReceiverSerial, Stream &TransmitterSerial):
-ReceiverSerial(ReceiverSerial), TransmitterSerial(TransmitterSerial) {
+GotwayM0::GotwayM0(Stream &ReceiverSerial, Stream &TransmitterSerial) : ReceiverSerial(ReceiverSerial), TransmitterSerial(TransmitterSerial)
+{
 }
 
-void GotwayM0::setCallback(void (*eucLoopCallback)(float,float,float,float,float,float,bool)) {
-  eucLoop = eucLoopCallback;
+void GotwayM0::setCallback(void (*eucLoopCallback)(float, float, float, float, float, float, bool))
+{
+    eucLoop = eucLoopCallback;
 }
 
 void GotwayM0::tick()
