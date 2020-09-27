@@ -19,11 +19,8 @@ beep	KEYWORD2
 setRideRigidity	KEYWORD2
 calibrateAlignment	KEYWORD2
 setAlarms	KEYWORD2
-enableAlarms	KEYWORD2
-set6kmhTiltback	KEYWORD2
-
 
 #######################################
 # Constants
 #######################################
- 
+
