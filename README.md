@@ -8,7 +8,7 @@ I will not be responsible or liable, directly or indirectly, in any way for any 
 
 API guide, and internal workings of the library are located at project [wiki](https://github.com/GGorAA/EUCSerialInterface/wiki).
 
-## Instalattion
+## Installation
 
 To install this library, go to Arduino Library Manager, search for EUCSerialInterface, or download lib from [Releases](https://github.com/GGorAA/EUCSerialInterface/releases) page.
 Extract the `.zip` file, and place the extracted folder in the Arduino/libraries folder.
