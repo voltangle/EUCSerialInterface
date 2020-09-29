@@ -26,7 +26,6 @@ class GotwayMcm2 {
             float tempMileage;
             float current;
             float temperature;
-            //unsigned char unknownData[4];
             float mileage;
             bool dataIsNew = false;
         };
@@ -131,7 +130,6 @@ class GotwayM0 { // GotWay M0 class
             float tempMileage;
             float current;
             float temperature;
-            //unsigned char unknownData[4];
             float mileage;
             bool dataIsNew = false;
         };
