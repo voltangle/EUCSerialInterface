@@ -1,5 +1,7 @@
 # EUC Serial Interface Library: Arduino library to interface electric unicycles
 
+# Library is now kind of dead. I do not support it for now, but when i will want to continue development, this library will regain support :D
+
 ## Disclaimer
 
 I will not be responsible or liable, directly or indirectly, in any way for any loss or damage of any kind incurred as a result of using this library or parts thereof.  
